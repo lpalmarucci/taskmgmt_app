@@ -57,10 +57,6 @@ export function SignUpForm({ className, ...props }: UserAuthFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-
     setIsLoading(true);
 
     setTimeout(() => {

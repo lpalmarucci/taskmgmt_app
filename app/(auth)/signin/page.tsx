@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import * as React from 'react';
 import { SignInForm } from '@/components/SignInForm';
+import GithubSignInButton from '@/components/buttons/GithubSignInButton';
 
-export default function SigninPage() {
+export default async function SigninPage() {
   return (
     <div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="min-w-[100dvw] flex">
@@ -20,6 +21,8 @@ export default function SigninPage() {
             </div>
             <div className={cn('grid gap-6')}>
               <SignInForm />
+
+              <GithubSignInButton />
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />
