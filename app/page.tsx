@@ -1,6 +1,10 @@
-import Link from 'next/link';
+import GithubSignInButton from '@/components/buttons/GithubSignInButton';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await getServerSession();
+  if (session?.user) redirect('/projects');
   return (
     <div className="bg-background w-full min-h-[100dvh] flex justify-center items-center">
       <div className="flex flex-col gap-6 justify-center items-center">
@@ -8,15 +12,7 @@ export default function Dashboard() {
           Welcome to TASKMGMT
         </h1>
         <h6 className="scroll-m-20 text-xl tracking-tight">
-          Get started by{' '}
-          <Link href="/signin" className="underline">
-            creating an account
-          </Link>{' '}
-          or{' '}
-          <Link href="/signin" className="underline">
-            signing in
-          </Link>{' '}
-          if you already have an account.
+          <GithubSignInButton />
         </h6>
       </div>
     </div>

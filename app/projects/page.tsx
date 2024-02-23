@@ -4,7 +4,12 @@ import { PlusCircledIcon } from '@radix-ui/react-icons';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
-export default function ProjectsPage() {
+export const metadata = {
+  title: 'Projects',
+  description: 'List of all projects',
+};
+
+export default async function ProjectsPage() {
   return (
     <div className="h-full px-4 py-6 lg:px-8">
       <Tabs defaultValue="board" className="h-full space-y-6">
