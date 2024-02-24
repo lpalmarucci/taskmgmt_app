@@ -37,11 +37,11 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 
-const userFormSchema = z.object({
+const userSchema = z.object({
   id: z.number().nonnegative(),
   name: z.string().min(0),
 });
-type User = z.infer<typeof userFormSchema>;
+type User = z.infer<typeof userSchema>;
 
 const users: User[] = [
   {
@@ -56,8 +56,8 @@ const users: User[] = [
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Title must be provided' }),
-  description: z.string(),
-  users: userFormSchema.array(),
+  description: z.string().optional(),
+  users: userSchema.array(),
 });
 
 function CreateEditProjectSheet({
@@ -75,21 +75,15 @@ function CreateEditProjectSheet({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // setIsLoading(true);
-    //
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 3000);
-  }
+  function onSubmit(values: z.infer<typeof formSchema>) {}
 
   return (
     <Sheet open={isOpen}>
       <SheetContent onClose={onClose}>
         <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
+          <SheetTitle>Create project</SheetTitle>
           <SheetDescription>
-            Make changes to your profile here. Click save when you're done.
+            Add new project here. Click save when you're done.
           </SheetDescription>
         </SheetHeader>
         {/*<div className="grid gap-4 py-4">*/}
@@ -167,7 +161,7 @@ function CreateEditProjectSheet({
                           <CommandGroup>
                             {users.map((user) => (
                               <CommandItem
-                                value={user.id.toString()}
+                                value={user.name}
                                 key={user.id}
                                 onSelect={() => {
                                   const values = field.value;
@@ -207,7 +201,11 @@ function CreateEditProjectSheet({
         </div>
         <SheetFooter>
           <SheetClose asChild onClick={onClose}>
-            <Button type="submit" onClick={onClose}>
+            <Button
+              type="submit"
+              onClick={onClose}
+              disabled={!form.formState.isValid}
+            >
               Save changes
             </Button>
           </SheetClose>
