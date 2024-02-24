@@ -57,7 +57,7 @@ const users: User[] = [
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Title must be provided' }),
   description: z.string().optional(),
-  users: userSchema.array(),
+  users: z.array(userSchema).min(1, { message: 'Select at least one user' }),
 });
 
 function CreateEditProjectSheet({
@@ -71,15 +71,21 @@ function CreateEditProjectSheet({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      users: [],
+      description: '',
+      users: [] as User[],
     },
   });
+
+  function handleSheetClose() {
+    form.reset();
+    onClose();
+  }
 
   function onSubmit(values: z.infer<typeof formSchema>) {}
 
   return (
     <Sheet open={isOpen}>
-      <SheetContent onClose={onClose}>
+      <SheetContent onClose={handleSheetClose}>
         <SheetHeader>
           <SheetTitle>Create project</SheetTitle>
           <SheetDescription>
@@ -117,13 +123,18 @@ function CreateEditProjectSheet({
                 )}
               />
               <FormField
+                control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input placeholder="Description" {...field} />
+                      <Input
+                        placeholder="This is a project about..."
+                        {...field}
+                      />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -171,7 +182,9 @@ function CreateEditProjectSheet({
                                   oldValueIndex === -1
                                     ? values.push(user)
                                     : values.splice(oldValueIndex, 1);
-                                  form.setValue('users', values);
+                                  form.setValue('users', values, {
+                                    shouldValidate: true,
+                                  });
                                 }}
                               >
                                 {user.name}
@@ -200,10 +213,10 @@ function CreateEditProjectSheet({
           </Form>
         </div>
         <SheetFooter>
-          <SheetClose asChild onClick={onClose}>
+          <SheetClose asChild onClick={handleSheetClose}>
             <Button
               type="submit"
-              onClick={onClose}
+              onClick={handleSheetClose}
               disabled={!form.formState.isValid}
             >
               Save changes
